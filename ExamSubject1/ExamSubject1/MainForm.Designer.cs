@@ -28,28 +28,58 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.listViewRegistrations = new System.Windows.Forms.ListView();
             this.btnAddReg = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listViewRegistrations
             // 
             this.listViewRegistrations.HideSelection = false;
-            this.listViewRegistrations.Location = new System.Drawing.Point(276, 41);
+            this.listViewRegistrations.Location = new System.Drawing.Point(12, 45);
             this.listViewRegistrations.Name = "listViewRegistrations";
-            this.listViewRegistrations.Size = new System.Drawing.Size(258, 316);
+            this.listViewRegistrations.Size = new System.Drawing.Size(531, 282);
             this.listViewRegistrations.TabIndex = 0;
             this.listViewRegistrations.UseCompatibleStateImageBehavior = false;
             // 
             // btnAddReg
             // 
-            this.btnAddReg.Location = new System.Drawing.Point(29, 333);
+            this.btnAddReg.Location = new System.Drawing.Point(12, 353);
             this.btnAddReg.Name = "btnAddReg";
             this.btnAddReg.Size = new System.Drawing.Size(121, 24);
             this.btnAddReg.TabIndex = 1;
             this.btnAddReg.Text = "Add Registration";
             this.btnAddReg.UseVisualStyleBackColor = true;
             this.btnAddReg.Click += new System.EventHandler(this.btnAddReg_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.editToolStripMenuItem,
+            this.deleteToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStrip1.Text = "Options";
+            this.contextMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editToolStripMenuItem.Text = "Edit";
+            this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -60,6 +90,7 @@
             this.Controls.Add(this.listViewRegistrations);
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -68,6 +99,9 @@
 
         private System.Windows.Forms.ListView listViewRegistrations;
         private System.Windows.Forms.Button btnAddReg;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }
 

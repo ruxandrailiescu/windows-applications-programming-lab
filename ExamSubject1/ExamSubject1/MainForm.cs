@@ -29,6 +29,10 @@ namespace ExamSubject1
             listViewRegistrations.Columns.Add("Number of Passes", 100);
             listViewRegistrations.Columns.Add("Access Package", 100);
             listViewRegistrations.FullRowSelect = true;
+            listViewRegistrations.ContextMenuStrip = contextMenuStrip1;
+
+            // Load access packages into combo box
+            // ...
         }
 
         private List<AccessPackage> LoadAccessPackages(string filePath)
@@ -74,6 +78,45 @@ namespace ExamSubject1
                 item.Tag = registration;
 
                 listViewRegistrations.Items.Add(item);
+            }
+        }
+
+        private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
+        {
+            if(listViewRegistrations.SelectedItems.Count == 0) 
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(listViewRegistrations.SelectedItems.Count > 0)
+            {
+                var item = listViewRegistrations.SelectedItems[0];
+                var registration = (Registration)item.Tag;
+
+                registrations.Remove(registration);
+                listViewRegistrations.Items.Remove(item);
+            }
+        }
+
+        private void editToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(listViewRegistrations.SelectedItems.Count > 0)
+            {
+                var item = listViewRegistrations.SelectedItems[0];
+                var registration = (Registration)item.Tag;
+
+                var form = new AddRegistrationForm(accessPackages, registration);
+                if(form.ShowDialog() == DialogResult.OK)
+                {
+                    registration = form.Registration;
+                    item.SubItems[0].Text = registration.CompanyName;
+                    item.SubItems[1].Text = registration.NoOfPasses.ToString();
+                    item.SubItems[2].Text = accessPackages.First(p => p.Id == registration.AccessPackageId).Name;
+                    item.Tag = registration;
+                }
             }
         }
     }
