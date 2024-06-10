@@ -21,6 +21,7 @@ namespace ExamSubject1
         {
             InitializeComponent();
             accessPackages = LoadAccessPackages("C:\\Users\\Admin\\repos\\windows-applications-programming-lab\\ExamSubject1\\ExamSubject1\\Resources\\AccessPackages.txt");
+            Registration.SetAccessPackages(accessPackages);
             registrations = new List<Registration>();
 
             // ListView Setup
@@ -31,8 +32,8 @@ namespace ExamSubject1
             listViewRegistrations.FullRowSelect = true;
             listViewRegistrations.ContextMenuStrip = contextMenuStrip1;
 
-            // Load access packages into combo box
-            // ...
+            UpdateTotalCost();
+
         }
 
         private List<AccessPackage> LoadAccessPackages(string filePath)
@@ -67,7 +68,8 @@ namespace ExamSubject1
         private void btnAddReg_Click(object sender, EventArgs e)
         {
             var form = new AddRegistrationForm(accessPackages);
-            if(form.ShowDialog() == DialogResult.OK)
+
+            if (form.ShowDialog() == DialogResult.OK)
             {
                 var registration = form.Registration;
                 registrations.Add(registration);
@@ -78,12 +80,14 @@ namespace ExamSubject1
                 item.Tag = registration;
 
                 listViewRegistrations.Items.Add(item);
+
+                UpdateTotalCost();
             }
         }
 
         private void contextMenuStrip1_Opening(object sender, CancelEventArgs e)
         {
-            if(listViewRegistrations.SelectedItems.Count == 0) 
+            if (listViewRegistrations.SelectedItems.Count == 0) 
             {
                 e.Cancel = true;
             }
@@ -91,33 +95,46 @@ namespace ExamSubject1
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(listViewRegistrations.SelectedItems.Count > 0)
+            if (listViewRegistrations.SelectedItems.Count > 0)
             {
                 var item = listViewRegistrations.SelectedItems[0];
                 var registration = (Registration)item.Tag;
 
                 registrations.Remove(registration);
                 listViewRegistrations.Items.Remove(item);
+
+                UpdateTotalCost();
             }
         }
 
         private void editToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if(listViewRegistrations.SelectedItems.Count > 0)
+            if (listViewRegistrations.SelectedItems.Count > 0)
             {
                 var item = listViewRegistrations.SelectedItems[0];
                 var registration = (Registration)item.Tag;
+                registrations.Remove(registration);
 
                 var form = new AddRegistrationForm(accessPackages, registration);
-                if(form.ShowDialog() == DialogResult.OK)
+
+                if (form.ShowDialog() == DialogResult.OK)
                 {
                     registration = form.Registration;
+                    registrations.Add(registration);
                     item.SubItems[0].Text = registration.CompanyName;
                     item.SubItems[1].Text = registration.NoOfPasses.ToString();
                     item.SubItems[2].Text = accessPackages.First(p => p.Id == registration.AccessPackageId).Name;
                     item.Tag = registration;
+
+                    UpdateTotalCost();
                 }
             }
+        }
+
+        private void UpdateTotalCost()
+        {
+            double totalCost = registrations.Sum(r => (double)r);
+            toolStripStatusLabelTotalCost.Text = $"Total Cost: ${totalCost:F2}";
         }
     }
 }

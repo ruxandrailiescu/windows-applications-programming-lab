@@ -23,7 +23,7 @@ namespace ExamSubject1
 
             cbAccessPackage.Items.AddRange(accessPackages.Select(p => p.Name).ToArray());
 
-            if(registration != null )
+            if (registration != null)
             {
                 tbCompanyName.Text = registration.CompanyName;
                 nudNoOfPasses.Value = registration.NoOfPasses;
@@ -43,7 +43,7 @@ namespace ExamSubject1
                 return;
             }
 
-            if(selectedIndex < 0)
+            if (selectedIndex < 0)
             {
                 MessageBox.Show("Please select an access package.");
                 return;

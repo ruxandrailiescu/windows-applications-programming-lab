@@ -48,6 +48,7 @@
             // 
             // cbAccessPackage
             // 
+            this.cbAccessPackage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAccessPackage.FormattingEnabled = true;
             this.cbAccessPackage.Location = new System.Drawing.Point(204, 122);
             this.cbAccessPackage.Name = "cbAccessPackage";
