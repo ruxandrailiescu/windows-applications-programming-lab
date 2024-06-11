@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace ExamSubject1
 {
@@ -16,13 +17,15 @@ namespace ExamSubject1
     {
         private List<AccessPackage> accessPackages;
         private List<Registration> registrations;
+        private const string XmlFilePath = "registrations.xml";
 
         public MainForm()
         {
             InitializeComponent();
             accessPackages = LoadAccessPackages("C:\\Users\\Admin\\repos\\windows-applications-programming-lab\\ExamSubject1\\ExamSubject1\\Resources\\AccessPackages.txt");
             Registration.SetAccessPackages(accessPackages);
-            registrations = new List<Registration>();
+            registrations = LoadRegistrations(XmlFilePath) ?? new List<Registration>();
+            //registrations = new List<Registration>();
 
             // ListView Setup
             listViewRegistrations.View = View.Details;
@@ -32,6 +35,7 @@ namespace ExamSubject1
             listViewRegistrations.FullRowSelect = true;
             listViewRegistrations.ContextMenuStrip = contextMenuStrip1;
 
+            PopulateListView();
             UpdateTotalCost();
 
         }
@@ -82,6 +86,7 @@ namespace ExamSubject1
                 listViewRegistrations.Items.Add(item);
 
                 UpdateTotalCost();
+                SaveRegistrations(XmlFilePath, registrations);
             }
         }
 
@@ -104,6 +109,7 @@ namespace ExamSubject1
                 listViewRegistrations.Items.Remove(item);
 
                 UpdateTotalCost();
+                SaveRegistrations(XmlFilePath, registrations);
             }
         }
 
@@ -127,6 +133,7 @@ namespace ExamSubject1
                     item.Tag = registration;
 
                     UpdateTotalCost();
+                    SaveRegistrations(XmlFilePath, registrations);
                 }
             }
         }
@@ -135,6 +142,55 @@ namespace ExamSubject1
         {
             double totalCost = registrations.Sum(r => (double)r);
             toolStripStatusLabelTotalCost.Text = $"Total Cost: ${totalCost:F2}";
+        }
+
+        private void PopulateListView()
+        {
+            listViewRegistrations.Items.Clear();
+            foreach (var registration in registrations)
+            {
+                ListViewItem item = new ListViewItem(registration.CompanyName);
+                item.SubItems.Add(registration.NoOfPasses.ToString());
+                item.SubItems.Add(accessPackages.First(p => p.Id == registration.AccessPackageId).Name);
+                item.Tag = registration;
+
+                listViewRegistrations.Items.Add(item);
+            }
+        }
+
+        private void SaveRegistrations(string filePath, List<Registration> registrations)
+        {
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Registration>));
+                using (StreamWriter writer = new StreamWriter(filePath))
+                {
+                    serializer.Serialize(writer, registrations);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to save registrations: {ex.Message}");
+            }
+        }
+
+        private List<Registration> LoadRegistrations(string filePath)
+        {
+            if (!File.Exists(filePath)) return null;
+
+            try
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(List<Registration>));
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    return (List<Registration>)serializer.Deserialize(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load registrations: {ex.Message}");
+                return null;
+            }
         }
     }
 }
