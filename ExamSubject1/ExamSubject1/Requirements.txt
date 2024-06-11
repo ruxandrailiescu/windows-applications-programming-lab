@@ -1,0 +1,38 @@
+﻿Mandatory: the project should compile and run without any errors.
+
+You are asked to develop a Windows Forms application for a C# developer conference, dedicated to
+companies. The companies will be able to buy three types of access packages for their employees: silver,
+gold and platinum.
+
+1. (2.5p)
+▪ Define the AccessPackage class with the properties Id (int), Name (string) and Price (double). Define
+the Registration class with the properties CompanyName (string), NoOfPasses (int) and
+AccessPackageId (int). The classes should contain parametrized constructors.
+▪ The available access packages will be loaded from the AccessPackages.txt file. The text file should be
+created using a text editor at your choice and should contain 3 entries.
+
+2. (2.5p)
+▪ The instances of the Registration class will be added using a secondary form, that will implement the
+necessary validations. The user will be able to choose the access package using a ComboBox control.
+The instances of the class will be stored in a List<T> collection and will be displayed in the main form
+using a ListView control.
+▪ The user will be given the possibility to either modify (right click) or delete the records.
+
+3. (1p)
+▪ Implement the explicit double cast operator in order to calculate the cost of each registration. Display
+the total cost for all registrations using a StatusStrip control and update it for any changes in the list of
+registrations.
+
+4. (1p)
+▪ The application will automatically persist the list of registrations to an XML based file. The list of
+registrations will be automatically restored from the XML file when the application starts (if the file
+exists).
+
+5. (2p)
+▪ Implement the IComparer<T> / IComparer interface in order to allow the user to sort the list of
+registrations ascendingly on either the name of the company or on the type of access package. The
+user should be able to choose the current sorting order from the main form.
+
+6. (1p)
+▪ In a secondary form, draw a chart containing the number of registrations for each type of access
+package.
