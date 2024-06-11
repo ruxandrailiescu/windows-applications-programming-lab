@@ -24,6 +24,7 @@ namespace ExamSubject1
             InitializeComponent();
             accessPackages = LoadAccessPackages("C:\\Users\\Admin\\repos\\windows-applications-programming-lab\\ExamSubject1\\ExamSubject1\\Resources\\AccessPackages.txt");
             Registration.SetAccessPackages(accessPackages);
+            
             registrations = LoadRegistrations(XmlFilePath) ?? new List<Registration>();
             //registrations = new List<Registration>();
 
@@ -34,6 +35,10 @@ namespace ExamSubject1
             listViewRegistrations.Columns.Add("Access Package", 100);
             listViewRegistrations.FullRowSelect = true;
             listViewRegistrations.ContextMenuStrip = contextMenuStrip1;
+
+            comboBoxSortBy.Items.AddRange(new string[] { "Company Name", "Access Package" });
+            comboBoxSortBy.SelectedIndexChanged += comboBoxSortBy_SelectedIndexChanged;
+            comboBoxSortBy.SelectedIndex = 0; // Default sorting by company name
 
             PopulateListView();
             UpdateTotalCost();
@@ -51,7 +56,7 @@ namespace ExamSubject1
                 foreach(var line in lines)
                 {
                     string[] parts = line.Split(',');
-                    if(parts.Length == 3)
+                    if (parts.Length == 3)
                     {
                         int id = int.Parse(parts[0]);
                         string name = parts[1];
@@ -191,6 +196,34 @@ namespace ExamSubject1
                 MessageBox.Show($"Failed to load registrations: {ex.Message}");
                 return null;
             }
+        }
+
+        private void comboBoxSortBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            IComparer<Registration> comparer = null;
+
+            switch (comboBoxSortBy.SelectedIndex)
+            {
+                case 0:
+                    comparer = new RegistrationCompanyNameComparer(); 
+                    break;
+                
+                case 1:
+                    comparer = new RegistrationAccessPackageComparer();
+                    break;
+            }
+
+            if (comparer != null)
+            {
+                registrations.Sort(comparer);
+                PopulateListView();
+            }
+        }
+
+        private void btnShowChart_Click(object sender, EventArgs e)
+        {
+            var chartForm = new ChartForm(registrations, accessPackages);
+            chartForm.ShowDialog();
         }
     }
 }

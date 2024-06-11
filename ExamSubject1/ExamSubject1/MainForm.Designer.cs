@@ -36,6 +36,8 @@
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelTotalCost = new System.Windows.Forms.ToolStripStatusLabel();
+            this.comboBoxSortBy = new System.Windows.Forms.ComboBox();
+            this.btnShowChart = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -99,11 +101,32 @@
             this.toolStripStatusLabelTotalCost.Name = "toolStripStatusLabelTotalCost";
             this.toolStripStatusLabelTotalCost.Size = new System.Drawing.Size(0, 17);
             // 
+            // comboBoxSortBy
+            // 
+            this.comboBoxSortBy.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxSortBy.FormattingEnabled = true;
+            this.comboBoxSortBy.Location = new System.Drawing.Point(13, 13);
+            this.comboBoxSortBy.Name = "comboBoxSortBy";
+            this.comboBoxSortBy.Size = new System.Drawing.Size(138, 21);
+            this.comboBoxSortBy.TabIndex = 4;
+            // 
+            // btnShowChart
+            // 
+            this.btnShowChart.Location = new System.Drawing.Point(428, 353);
+            this.btnShowChart.Name = "btnShowChart";
+            this.btnShowChart.Size = new System.Drawing.Size(115, 23);
+            this.btnShowChart.TabIndex = 5;
+            this.btnShowChart.Text = "Show Chart";
+            this.btnShowChart.UseVisualStyleBackColor = true;
+            this.btnShowChart.Click += new System.EventHandler(this.btnShowChart_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(555, 408);
+            this.Controls.Add(this.btnShowChart);
+            this.Controls.Add(this.comboBoxSortBy);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.btnAddReg);
             this.Controls.Add(this.listViewRegistrations);
@@ -126,6 +149,8 @@
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelTotalCost;
+        private System.Windows.Forms.ComboBox comboBoxSortBy;
+        private System.Windows.Forms.Button btnShowChart;
     }
 }
 
