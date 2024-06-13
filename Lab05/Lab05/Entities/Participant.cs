@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lab05.Entities
 {
+    [Serializable]
     public class Participant
     {
         public string LastName { get; set; }
@@ -28,7 +29,9 @@ namespace Lab05.Entities
         public GenderEnum Gender { get; set; }
         public string SSN { get; set; }
 
-        // Constructor
+        // Constructors
+        public Participant() { }
+
         public Participant(string lastName, string firstName, DateTime birthDate,
             GenderEnum gender, string ssn)
         {
