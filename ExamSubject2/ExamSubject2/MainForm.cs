@@ -92,6 +92,7 @@ namespace ExamSubject2
             {
                 var smartphone = form.Smartphone;
                 _smartphones.Add(smartphone);
+                _smartphones.Sort();
                 PopulateDataGridView();
                 //dataGridViewSmartphones.DataSource = null;
                 //dataGridViewSmartphones.DataSource = _smartphones;
@@ -112,6 +113,7 @@ namespace ExamSubject2
                     _smartphones.Remove(smartphone);
                     smartphone = form.Smartphone;
                     _smartphones.Add(smartphone);
+                    _smartphones.Sort();
                     PopulateDataGridView();
                 }
             }

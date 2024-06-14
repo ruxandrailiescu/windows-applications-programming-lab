@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExamSubject2.Entities
 {
-    public class Smartphone
+    public class Smartphone : IComparable<Smartphone>
     {
         public int Id {  get; set; }
         public string Model {  get; set; }
@@ -23,6 +23,20 @@ namespace ExamSubject2.Entities
             Price = price;
             ReleaseDate = releaseDate;
             ProducerId = producerId;
+        }
+
+        public int CompareTo(Smartphone other)
+        {
+            // 1. sort by price first
+            int priceComparison = Price.CompareTo(other.Price);
+
+            // 2. then, if prices are identical, sort by units available
+            if (priceComparison == 0)
+            {
+                return Units.CompareTo(other.Units);
+            }
+
+            return priceComparison;
         }
     }
 }
