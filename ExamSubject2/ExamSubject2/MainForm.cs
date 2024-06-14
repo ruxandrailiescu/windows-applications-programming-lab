@@ -21,7 +21,8 @@ namespace ExamSubject2
             InitializeComponent();
             _producers = LoadProducers("C:\\Users\\Admin\\repos\\windows-applications-programming-lab\\ExamSubject2\\ExamSubject2\\Resources\\Data.txt");
             _smartphones = new List<Smartphone>();
-            dataGridViewSmartphones.DataSource = _smartphones;
+            PopulateDataGridView();
+            //dataGridViewSmartphones.DataSource = _smartphones;
             dataGridViewSmartphones.ContextMenuStrip = contextMenuStrip1;
         }
 
@@ -54,6 +55,35 @@ namespace ExamSubject2
             return producers;
         }
 
+        private void PopulateDataGridView()
+        {
+            dataGridViewSmartphones.Rows.Clear();
+
+            string producer = "";
+            int indexRow = 0;
+
+            foreach (var smartphone in _smartphones)
+            {
+                producer = _producers.First(p => p.Id == smartphone.ProducerId).Name;
+                indexRow = dataGridViewSmartphones.Rows.Add(
+                    smartphone.Id.ToString(), 
+                    smartphone.Model,
+                    smartphone.Units.ToString(), 
+                    smartphone.Price.ToString(), 
+                    smartphone.ReleaseDate.ToString("dd/mm/yyyy"),
+                    producer);
+                dataGridViewSmartphones.Rows[indexRow].Tag = smartphone;
+            }
+        }
+
+        private void dataGridViewSmartphones_RowHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                dataGridViewSmartphones.Rows[e.RowIndex].Selected = true;
+            }
+        }
+
         private void btnAddSmartphone_Click(object sender, EventArgs e)
         {
             var form = new AddEditSmartphoneForm(_producers);
@@ -62,10 +92,9 @@ namespace ExamSubject2
             {
                 var smartphone = form.Smartphone;
                 _smartphones.Add(smartphone);
-
-                dataGridViewSmartphones.DataSource = null;
-                dataGridViewSmartphones.DataSource = _smartphones;
-                dataGridViewSmartphones.Tag = smartphone;
+                PopulateDataGridView();
+                //dataGridViewSmartphones.DataSource = null;
+                //dataGridViewSmartphones.DataSource = _smartphones;
             }
         }
 
@@ -83,10 +112,19 @@ namespace ExamSubject2
                     _smartphones.Remove(smartphone);
                     smartphone = form.Smartphone;
                     _smartphones.Add(smartphone);
-                    dataGridViewSmartphones.DataSource = null;
-                    dataGridViewSmartphones.DataSource= _smartphones;
-                    dataGridViewSmartphones.Tag= smartphone;
+                    PopulateDataGridView();
                 }
+            }
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewSmartphones.SelectedRows.Count > 0)
+            {
+                var item = dataGridViewSmartphones.SelectedRows[0];
+                var smartphone = (Smartphone)item.Tag;
+                _smartphones.Remove(smartphone);
+                PopulateDataGridView();
             }
         }
     }

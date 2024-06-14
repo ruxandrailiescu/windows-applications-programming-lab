@@ -34,6 +34,12 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colModel = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colUnits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPrice = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colReleaseDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colProd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSmartphones)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -45,10 +51,18 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridViewSmartphones.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.dataGridViewSmartphones.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSmartphones.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colId,
+            this.colModel,
+            this.colUnits,
+            this.colPrice,
+            this.colReleaseDate,
+            this.colProd});
             this.dataGridViewSmartphones.Location = new System.Drawing.Point(12, 182);
             this.dataGridViewSmartphones.Name = "dataGridViewSmartphones";
             this.dataGridViewSmartphones.Size = new System.Drawing.Size(740, 261);
             this.dataGridViewSmartphones.TabIndex = 0;
+            this.dataGridViewSmartphones.RowHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewSmartphones_RowHeaderMouseClick);
             // 
             // btnAddSmartphone
             // 
@@ -66,12 +80,12 @@
             this.editToolStripMenuItem,
             this.deleteToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(108, 48);
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
             this.editToolStripMenuItem.Text = "Edit";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.editToolStripMenuItem_Click);
             // 
@@ -80,6 +94,37 @@
             this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
             this.deleteToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // colId
+            // 
+            this.colId.HeaderText = "Id";
+            this.colId.Name = "colId";
+            // 
+            // colModel
+            // 
+            this.colModel.HeaderText = "Model";
+            this.colModel.Name = "colModel";
+            // 
+            // colUnits
+            // 
+            this.colUnits.HeaderText = "Units";
+            this.colUnits.Name = "colUnits";
+            // 
+            // colPrice
+            // 
+            this.colPrice.HeaderText = "Price";
+            this.colPrice.Name = "colPrice";
+            // 
+            // colReleaseDate
+            // 
+            this.colReleaseDate.HeaderText = "Release Date";
+            this.colReleaseDate.Name = "colReleaseDate";
+            // 
+            // colProd
+            // 
+            this.colProd.HeaderText = "Producer";
+            this.colProd.Name = "colProd";
             // 
             // MainForm
             // 
@@ -103,6 +148,12 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colId;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colModel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUnits;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPrice;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colReleaseDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colProd;
     }
 }
 

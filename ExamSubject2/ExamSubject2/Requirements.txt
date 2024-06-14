@@ -1,0 +1,24 @@
+﻿Create a Windows Forms application for a shop that sells smartphones. Define the following classes:
+Smartphone (id, model, units available, price, release date, producer id) and Producer (id, name).
+
+(0.5p) For the Producer class, the data for instantiating the objects will be automatically
+loaded from a text file (containing minimum 5 entries) when the application is launched.
+
+(1p) The instances of the Smartphone class will be stored inside the application in a standard
+collection and will be displayed in the main form through a DataGridView control.
+
+(1.5p) Adding new instances of the Smartphone class will be accomplished through a secondary form.
+Data validation is required and signaling potential errors will be accomplished through ErrorProvider
+controls.
+
+(1.5p) The application will allow editing and deletion of the instances displayed in the DataGridView
+through a ContextMenuStrip. Modification of said instances will be done through a secondary form.
+
+(1.5p) Implement the IComparable<T> interface to sort the objects of the Smartphone class by 2 criteria.
+Maintain the list displayed in the main form sorted at all times.
+
+(2p) The application will load automatically the list of smartphones from a relational database.
+The name and location of the database are considered known.
+
+(1p) Implement the explicit cast operator to int to return the number of available units for a 
+smartphone model. Use the operator to display the total number of smartphones through a MessageBox.
