@@ -26,6 +26,7 @@ namespace ExamSubject2
             PopulateDataGridView();
             //dataGridViewSmartphones.DataSource = _smartphones;
             dataGridViewSmartphones.ContextMenuStrip = contextMenuStrip1;
+            DisplayTotalSmartphones();
         }
 
         private List<Producer> LoadProducers(string filePath)
@@ -96,6 +97,7 @@ namespace ExamSubject2
                 _smartphones.Add(smartphone);
                 _smartphones.Sort();
                 PopulateDataGridView();
+                DisplayTotalSmartphones();
                 //dataGridViewSmartphones.DataSource = null;
                 //dataGridViewSmartphones.DataSource = _smartphones;
             }
@@ -117,6 +119,7 @@ namespace ExamSubject2
                     _smartphones.Add(smartphone);
                     _smartphones.Sort();
                     PopulateDataGridView();
+                    DisplayTotalSmartphones();
                 }
             }
         }
@@ -129,6 +132,7 @@ namespace ExamSubject2
                 var smartphone = (Smartphone)item.Tag;
                 _smartphones.Remove(smartphone);
                 PopulateDataGridView();
+                DisplayTotalSmartphones();
             }
         }
 
@@ -183,5 +187,16 @@ namespace ExamSubject2
         }
 
         #endregion
+
+        private void DisplayTotalSmartphones()
+        {
+            int totalUnits = 0;
+
+            foreach (var smartphone in _smartphones)
+            {
+                totalUnits += (int)smartphone;
+            }
+            MessageBox.Show($"Total number of smartphones available: {totalUnits}", "Total Smartphones");
+        }
     }
 }

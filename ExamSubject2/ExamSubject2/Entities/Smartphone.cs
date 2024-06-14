@@ -38,5 +38,10 @@ namespace ExamSubject2.Entities
 
             return priceComparison;
         }
+
+        public static explicit operator int(Smartphone smartphone)
+        {
+            return smartphone.Units;
+        }
     }
 }
