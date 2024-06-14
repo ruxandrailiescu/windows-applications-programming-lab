@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExamSubject3.Entities
 {
-    public class Participant
+    public class Participant : IComparable<Participant>
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -21,6 +21,16 @@ namespace ExamSubject3.Entities
             Email = email;
             BirthDate = birthDate;
             Concerts = concerts;
+        }
+
+        public static explicit operator int(Participant participant)
+        {
+            return participant.Concerts.Count;
+        }
+
+        public int CompareTo(Participant other)
+        {
+            return Name.CompareTo(other.Name);
         }
     }
 }
