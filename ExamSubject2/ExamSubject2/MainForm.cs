@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SQLite;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace ExamSubject2
     {
         private List<Producer> _producers;
         private List<Smartphone> _smartphones;
+        private const string ConnectionString = "Data Source=database.db";
         public MainForm()
         {
             InitializeComponent();
@@ -129,5 +131,57 @@ namespace ExamSubject2
                 PopulateDataGridView();
             }
         }
+
+        #region Database
+
+        // Additional requirement - save to database
+        private void AddSmartphoneDB(Smartphone smartphone)
+        {
+            string query = "INSERT INTO Smartphones (Id, Model, Units, Price, ReleaseDate, ProducerId) "
+                + "VALUES (@id, @model, @units, @price, @releaseDate, @producerId)";
+
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                command.Parameters.AddWithValue("@id", smartphone.Id);
+                command.Parameters.AddWithValue("@model", smartphone.Model);
+                command.Parameters.AddWithValue("@units", smartphone.Units);
+                command.Parameters.AddWithValue("@price", smartphone.Price);
+                command.Parameters.AddWithValue("@releaseDate", smartphone.ReleaseDate);
+                command.Parameters.AddWithValue("@producerId", smartphone.ProducerId);
+
+                command.ExecuteScalar();
+            }
+        }
+
+        private void LoadSmartphonesDB()
+        {
+            const string query = "SELECT * FROM Smartphones";
+
+            using (SQLiteConnection connection = new SQLiteConnection(ConnectionString))
+            {
+                connection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(query, connection);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int id = (int)reader["Id"];
+                        string model = (string)reader["Model"];
+                        int units = (int)reader["Units"];
+                        double price = (double)reader["Price"];
+                        DateTime releaseDate = DateTime.Parse((string)reader["ReleaseDate"]);
+                        int producerId = (int)reader["ProducerId"];
+
+                        Smartphone smartphone = new Smartphone(id, model, units, price, releaseDate, producerId);
+                    }
+                }
+            }
+        }
+
+        #endregion
     }
 }
