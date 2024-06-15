@@ -1,0 +1,33 @@
+﻿Mandatory: the project should compile and run without any errors.
+
+(1p+) You are asked to develop an application for a hotel that offers rooms with different numbers 
+of beds. The application will use the Room class (Id, Number, Beds) and the Reservation class 
+(Id, RoomId, CheckInDate, CheckOutDate, Persons).
+
+(0.5p) The rooms will be loaded from a text file containing at least three entries.
+
+(2p) New reservations will be added using a secondary form, in which the user will be able to choose 
+the room using a ListBox control. The number of persons should not exceed the number of beds. The 
+CheckOutDate should be after the CheckInDate. The validation errors will be displayed next to the 
+corresponding fields when the user changes the focus to another control, as well as when the user 
+clicks the "Save" button. The application should not crash if the user inputs invalid information.
+
+(0.5p) The instances of the class will be stored in a List<T> collection (or any other collection type) 
+and will be displayed in the main form using a ListView control.
+
+(1p) Add a contextual menu to the ListView, allowing the user to edit or delete the entries. Editing 
+should be performed in a secondary form.
+
+(0.5p) Add a toolbar to the application, allowing the user to export the list of reservations in XML 
+format. The name and the location of the file will be chosen using a SaveFileDialog.
+
+(1p) Implement the ++ operator for one of the classes. Override the ToString method for one of the 
+classes. 
+
+(2p) The list of reservations will be automatically loaded when the application starts with the values 
+retrieved from a database (Access, SQLServer, or SQLite). 
+
+(0.5p) Implement the IComparer<T> / IComparer interface for one of the classes in order to compare its 
+instances on two criteria. The user will be able to choose the current criteria from a ComboBox. 
+
+(1p) The user should be able to preview the list and to make changes to the page settings.

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfReservation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Reservation>
+    <Id>1</Id>
+    <CheckInDate>2024-06-05T07:39:26</CheckInDate>
+    <CheckOutDate>2024-06-15T07:39:26.4175561+03:00</CheckOutDate>
+    <Persons>1</Persons>
+    <RoomId>1</RoomId>
+  </Reservation>
+</ArrayOfReservation>
