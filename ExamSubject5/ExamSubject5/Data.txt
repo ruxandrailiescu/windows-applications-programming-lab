@@ -1,0 +1,503 @@
+﻿LoadTextFile(string filePath)
+{
+    List<Specialty> specialties = new List<Specialty>();
+
+    if(File.Exists(filePath))
+    {
+        string[] lines = File.ReadAllLines(filePath);
+
+        foreach(string line in lines)
+        {
+            string[] parts = line.Split(',');
+
+            if(parts.Length == 2)
+            {
+                int id = int.Parse(parts[0]);
+                string name = parts[1];
+
+                specialties.Add(new Specialty(id, name));
+            }
+        }
+    }
+    else
+    {
+        MessageBox.Show("The file does not exist.");
+    }
+
+    return specialties;
+}
+
+PopulateListView()
+{
+    listViewDoctors.Items.Clear();
+
+    foreach(var doctor in doctors)
+    {
+        ListViewItem lvi = new ListViewItem(doctor.Id.ToString());
+        lvi.SubItems.Add(doctor.Name);
+        lvi.SubItems.Add(doctor.BirthDate.ToShortDateString());
+        lvi.SubItems.Add(doctor.Wage.ToString());
+        lvi.SubItems.Add(specialties.First(s => s.Id == doctor.SpecialtyId).Name);
+        lvi.Tag = doctor;
+
+        listViewDoctors.Items.Add(lvi);
+    }
+}
+
+PopulateDataGridView()
+{
+    dgvProducts.Rows.Clear();
+
+    foreach (var product in products)
+    {
+        string category = categories.First(c => c.Id == product.CategoryId).Name;
+        int indexRow = dgvProducts.Rows.Add(
+            product.Id.ToString(),
+            product.Name,
+            product.Units.ToString(),
+            product.Price.ToString(),
+            category
+            );
+        dgvProducts.Rows[indexRow].Tag = product;
+    }
+}
+
+LoadDB()
+{
+    string query = "SELECT * FROM Products";
+
+    using (SQLiteConnection conn = new SQLiteConnection(connectionString))
+    {
+        conn.Open();
+
+        SQLiteCommand command = new SQLiteCommand(query, conn);
+
+        using (SQLiteDataReader reader = command.ExecuteReader())
+        {
+            while (reader.Read())
+            {
+                long id = (long)reader["Id"];
+                string name = (string)reader["Name"];
+                long units = (long)reader["Units"];
+                double price = (double)reader["Price"];
+                long categoryId = (long)reader["CategoryId"];
+
+                Product product = new Product((int)id, name, (int)units, price, (int)categoryId);
+                products.Add(product);
+            }
+        }
+    }
+}
+
+AddDB(Product product)
+{
+    string query = "INSERT INTO Products (Id, Name, Units, Price, CategoryId) "
+        + "VALUES (@id, @name, @units, @price, @categoryId)";
+
+    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+    {
+        connection.Open();
+
+        SQLiteCommand command = new SQLiteCommand(query, connection);
+        command.Parameters.AddWithValue("@id", product.Id);
+        command.Parameters.AddWithValue("@name", product.Name);
+        command.Parameters.AddWithValue("@units", product.Units);
+        command.Parameters.AddWithValue("@price", product.Price);
+        command.Parameters.AddWithValue("@categoryId", product.CategoryId);
+
+        command.ExecuteNonQuery();
+    }
+}
+
+UpdateDB(Product product)
+{
+    string query = @"
+        UPDATE Products
+        SET
+            Id = @id,
+            Name = @name,
+            Units = @units,
+            Price = @price,
+            CategoryId = @categoryId
+        WHERE
+            Id = @id";
+
+    using (SQLiteConnection con = new SQLiteConnection(connectionString))
+    {
+        con.Open();
+
+        using (SQLiteCommand command = new SQLiteCommand(query, con))
+        {
+            command.Parameters.AddWithValue("@id", product.Id);
+            command.Parameters.AddWithValue("@name", product.Name);
+            command.Parameters.AddWithValue("@units", product.Units);
+            command.Parameters.AddWithValue("@price", product.Price);
+            command.Parameters.AddWithValue("@categoryId", product.CategoryId);
+
+            command.ExecuteNonQuery();
+        }
+    }
+}
+
+DeleteDB(Product product)
+{
+    string query = "DELETE FROM Products WHERE Id = @id";
+
+    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+    {
+        connection.Open();
+
+        SQLiteCommand command = new SQLiteCommand(query, connection);
+        command.Parameters.AddWithValue("@id", product.Id);
+
+        command.ExecuteNonQuery();
+    }
+}
+
+btnAdd()
+{
+    var form = new AddEditDoctor(specialties);
+
+    if (form.ShowDialog() == DialogResult.OK)
+    {
+        var doctor = form.Doctor;
+        doctors.Add(doctor);
+        PopulateListView();
+        AddDoctorDB(doctor);
+    }
+}
+
+btnSave()
+{
+    if (ValidateChildren())
+    {
+        int id = (int)nudId.Value;
+        string name = tbName.Text;
+        DateTime birthDate = dtpBirthDate.Value;
+        double wage = (double)nudWage.Value;
+        int specialtyId = specialties[lbSpecialty.SelectedIndex].Id;
+
+        Doctor = new Doctor(id, name, birthDate, wage, specialtyId);
+        DialogResult = DialogResult.OK;
+        Close();
+    }
+}
+
+editListView()
+{
+    if (listViewDoctors.SelectedItems.Count > 0)
+    {
+        var item = listViewDoctors.SelectedItems[0];
+        var doctor = (Doctor)item.Tag;
+
+        var form = new AddEditDoctor(specialties);
+        if (form.ShowDialog() == DialogResult.OK)
+        {
+            doctors.Remove(doctor);
+            doctor = form.Doctor;
+            doctors.Add(doctor);
+            PopulateListView();
+        }
+    }
+}
+
+deleteListView()
+{
+    if(listViewDoctors.SelectedItems.Count > 0)
+    {
+        var item = listViewDoctors.SelectedItems[0];
+        var doctor = (Doctor)item.Tag;
+
+        doctors.Remove(doctor);
+        PopulateListView();
+    }
+}
+
+private void editDataGridView(object sender, EventArgs e)
+{
+    if(dgvProducts.SelectedRows.Count > 0)
+    {
+        var item = dgvProducts.SelectedRows[0];
+        var product = (Product)item.Tag;
+        var form = new AddEditProduct(categories);
+
+        if(form.ShowDialog() == DialogResult.OK)
+        {
+            products.Remove(product);
+            product = form.Product;
+            products.Add(product);
+            PopulateDataGridView();
+            UpdateProductDB(product);
+        }
+    }
+}
+
+private void deleteDataGridView(object sender, EventArgs e)
+{
+    if(dgvProducts.SelectedRows.Count > 0)
+    {
+        var item = dgvProducts.SelectedRows[0];
+        var product = (Product)item.Tag;
+        products.Remove(product);
+        PopulateDataGridView();
+        DeleteProductDB(product);
+    }
+}
+
+
+private List<Specialty> specialties;
+public Doctor Doctor { get; set; }
+public AddEditDoctor(List<Specialty> _specialties)
+{
+    InitializeComponent();
+    specialties = _specialties;
+    lbSpecialty.Items.AddRange(specialties.Select(s => s.Name).ToArray());
+
+    nudId.Validating += nudId_Validating;
+    tbName.Validating += tbName_Validating;
+    dtpBirthDate.Validating += dtpBirthDate_Validating;
+    lbSpecialty.Validating += lbSpecialty_Validating;
+}
+
+
+private List<Specialty> specialties;
+private List<Doctor> doctors;
+private const string connectionString = "Data Source=C:\\Users\\Admin\\repos\\windows-applications-programming-lab\\ExamSubject5\\ExamSubject5\\database.db";
+public MainForm()
+{
+    InitializeComponent();
+    specialties = LoadSpecialties("C:\\Users\\Admin\\repos\\windows-applications-programming-lab\\ExamSubject5\\ExamSubject5\\Specialties.txt");
+    doctors = new List<Doctor>();
+    LoadDoctorsDB();
+    listViewDoctors.View = View.Details;
+    listViewDoctors.FullRowSelect = true;
+    PopulateListView();
+}
+
+private void exportXMLToolStripMenuItem_Click(object sender, EventArgs e)
+{
+    using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+    {
+        saveFileDialog.Filter = "XML File | *.xml";
+        saveFileDialog.Title = "Save Doctors List";
+
+        if(saveFileDialog.ShowDialog() == DialogResult.OK)
+        {
+            ExportToXML(saveFileDialog.FileName);
+        }
+    }
+}
+
+private void ExportToXML(string filePath)
+{
+    XmlSerializer serializer = new XmlSerializer(typeof(List<Doctor>));
+    using (StreamWriter  sw = new StreamWriter(filePath))
+    {
+        serializer.Serialize(sw, doctors);
+    }
+    MessageBox.Show("Export successful.");
+}
+
+private void btnDeserializeXML_Click(object sender, EventArgs e)
+{
+    XmlSerializer serializer = new XmlSerializer(typeof(List<Participant>));
+    using (FileStream stream = File.OpenRead("serializedXML.xml"))
+    {
+        _participants = (List<Participant>)serializer.Deserialize(stream);
+        DisplayParticipants();
+    }
+}
+
+private void btnSerializeBinary_Click(object sender, EventArgs e)
+{
+    BinaryFormatter formatter = new BinaryFormatter();
+    using (FileStream stream = File.Create("serializedBinary.bin"))  // store content in this file,
+                                                                        // inside bin folder
+    {
+        formatter.Serialize(stream, _participants);
+    }
+}
+
+private void btnDeserializeBinary_Click(object sender, EventArgs e)
+{
+    BinaryFormatter formatter = new BinaryFormatter();
+    using (FileStream stream = File.OpenRead("serializedBinary.bin"))
+    {
+        _participants = (List<Participant>)formatter.Deserialize(stream);
+        DisplayParticipants();
+    }
+}
+
+private void exportReportToolStripMenuItem_Click(object sender, EventArgs e)
+{
+    SaveFileDialog saveFileDialog = new SaveFileDialog();
+    saveFileDialog.Filter = "Text File | *.txt";
+    saveFileDialog.Title = "Save as text file";
+
+    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+    {
+        using (StreamWriter writer = File.CreateText(saveFileDialog.FileName))
+        {
+                
+            foreach (var participant in participants)
+            {
+                writer.WriteLine($"Id: {participant.Id}");
+                writer.WriteLine($"Name: {participant.Name}");
+                writer.WriteLine($"Email: {participant.Email}");
+                writer.WriteLine($"Birth Date: {participant.BirthDate.ToShortDateString()}");
+                writer.WriteLine("Concerts: " + string.Join(", ", participant.Concerts));
+                writer.WriteLine();
+            }
+            MessageBox.Show("File saved successfully");
+        }
+    }
+}
+
+private void sortByNameToolStripMenuItem1_Click(object sender, EventArgs e)
+{
+    doctors.Sort(new DoctorComparerName());
+    PopulateListView();
+}
+
+private void sortByBirthDateToolStripMenuItem1_Click(object sender, EventArgs e)
+{
+    doctors.Sort(new DoctorComparerBirthDate());
+    PopulateListView();
+}
+
+private void btnSave_Click(object sender, EventArgs e)
+{
+    if (ValidateChildren())
+    {
+        int id = (int)nudId.Value;
+        string name = tbName.Text;
+        string email = tbEmail.Text;
+        DateTime birthDate = dtpBirthDate.Value;
+        List<string> concerts = new List<string>();
+
+        foreach (var concert in checkedListBoxConcerts.CheckedItems)
+        {
+            concerts.Add(concert.ToString());
+        }
+
+        Participant = new Participant(id, name, email, birthDate, concerts);
+
+        DialogResult = DialogResult.OK;
+        Close();
+    }
+}
+
+public AddEditParticipant(List<string> concertArray, Participant participant = null)
+{
+    InitializeComponent();
+    checkedListBoxConcerts.Items.AddRange(concertArray.ToArray());
+
+    nudId.Validating += nudId_Validating;
+    tbName.Validating += tbName_Validating;
+    tbEmail.Validating += tbEmail_Validating;
+    dtpBirthDate.Validating += dtpBirthDate_Validating;
+
+    if (participant != null)
+    {
+        nudId.Value = participant.Id;
+        tbName.Text = participant.Name;
+        tbEmail.Text = participant.Email;
+        dtpBirthDate.Value = participant.BirthDate;
+
+        foreach (var concert in participant.Concerts)
+        {
+            for (int i = 0; i < checkedListBoxConcerts.Items.Count; i++)
+            {
+                if (concert.Equals(checkedListBoxConcerts.Items[i]))
+                {
+                    checkedListBoxConcerts.SetItemChecked(i, true);
+                }
+            }
+        }
+    }
+}
+
+public MainForm()
+{
+    InitializeComponent();
+    participants = new List<Participant>();
+    concertArray = new List<string>
+    {
+        "Coldplay",
+        "Saga Festival",
+        "Neversea Festival",
+        "Keinemusik",
+        "Kings of Leon"
+    };
+    LoadParticipantsDB();
+    PopulateDataGridView();
+}
+
+private void PopulateDataGridView()
+{
+    dataGridViewParticipants.Rows.Clear();
+
+    participants.Sort();
+    foreach (var participant in participants)
+    {
+        string concerts = string.Join(",", participant.Concerts);
+
+        int indexRow = dataGridViewParticipants.Rows.Add(
+            participant.Id.ToString(),
+            participant.Name,
+            participant.Email,
+            participant.BirthDate.ToString(),
+            concerts);
+        dataGridViewParticipants.Rows[indexRow].Tag = participant;
+    }
+}
+
+public partial class ChartForm : Form
+{
+    public ChartForm(List<Registration> registrations, List<AccessPackage> accessPackages)
+    {
+        InitializeComponent();
+        DrawChart(registrations, accessPackages);
+    }
+
+    private void DrawChart(List<Registration> registrations, List<AccessPackage> accessPackages)
+    {
+        var packageCounts = registrations
+            .GroupBy(r => r.AccessPackageId)
+            .Select(g => new
+            {
+                AccessPackageId = g.Key,
+                Count = g.Count()
+            })
+            .Join(accessPackages, g => g.AccessPackageId, p => p.Id, (g, p) => new
+            {
+                PackageName = p.Name,
+                g.Count
+            })
+            .ToList();
+
+        chartRegistrations.Series.Clear();
+
+        var series = new Series
+        {
+            Name = "Registrations",
+            ChartType = SeriesChartType.Column
+        };
+
+        chartRegistrations.Series.Add(series);
+
+        foreach (var package in packageCounts)
+        {
+            series.Points.AddXY(package.PackageName, package.Count);
+        }
+
+        chartRegistrations.ChartAreas[0].RecalculateAxesScale();
+    }
+}
+
+private void btnShowChart_Click(object sender, EventArgs e)
+{
+    var chartForm = new ChartForm(registrations, accessPackages);
+    chartForm.ShowDialog();
+}
+

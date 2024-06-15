@@ -99,6 +99,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data.txt" />
     <Content Include="Requirements.txt" />
     <Content Include="Specialties.txt" />
   </ItemGroup>
