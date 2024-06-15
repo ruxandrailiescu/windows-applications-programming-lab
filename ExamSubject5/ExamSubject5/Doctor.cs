@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExamSubject5
 {
+    [Serializable]
     public class Doctor
     {
         public int Id { get; set; }
@@ -13,6 +14,8 @@ namespace ExamSubject5
         public DateTime BirthDate { get; set; }
         public double Wage { get; set; }
         public int SpecialtyId { get; set; }
+
+        public Doctor() { }
 
         public Doctor(int id, string name, DateTime birthDate, double wage, int specialtyId)
         {

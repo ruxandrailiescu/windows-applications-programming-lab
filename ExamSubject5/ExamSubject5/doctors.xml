@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfDoctor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Doctor>
+    <Id>2</Id>
+    <Name>adi</Name>
+    <BirthDate>1969-06-15T04:48:43</BirthDate>
+    <Wage>2</Wage>
+    <SpecialtyId>1</SpecialtyId>
+  </Doctor>
+</ArrayOfDoctor>

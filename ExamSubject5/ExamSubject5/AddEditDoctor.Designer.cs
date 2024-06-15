@@ -53,6 +53,7 @@
             this.nudId.Name = "nudId";
             this.nudId.Size = new System.Drawing.Size(177, 20);
             this.nudId.TabIndex = 0;
+            this.nudId.Validating += new System.ComponentModel.CancelEventHandler(this.nudId_Validating);
             // 
             // tbName
             // 
@@ -60,6 +61,7 @@
             this.tbName.Name = "tbName";
             this.tbName.Size = new System.Drawing.Size(177, 20);
             this.tbName.TabIndex = 1;
+            this.tbName.Validating += new System.ComponentModel.CancelEventHandler(this.tbName_Validating);
             // 
             // dtpBirthDate
             // 
@@ -67,6 +69,7 @@
             this.dtpBirthDate.Name = "dtpBirthDate";
             this.dtpBirthDate.Size = new System.Drawing.Size(177, 20);
             this.dtpBirthDate.TabIndex = 2;
+            this.dtpBirthDate.Validating += new System.ComponentModel.CancelEventHandler(this.dtpBirthDate_Validating);
             // 
             // nudWage
             // 
@@ -83,6 +86,7 @@
             this.lbSpecialty.Name = "lbSpecialty";
             this.lbSpecialty.Size = new System.Drawing.Size(177, 95);
             this.lbSpecialty.TabIndex = 4;
+            this.lbSpecialty.Validating += new System.ComponentModel.CancelEventHandler(this.lbSpecialty_Validating);
             // 
             // label1
             // 
